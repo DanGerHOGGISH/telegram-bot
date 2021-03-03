@@ -2,18 +2,71 @@ from telegram import MessageEntity, ReplyKeyboardMarkup, InlineKeyboardMarkup, I
 from telegram.ext import Updater, CommandHandler, ConversationHandler, MessageHandler, Filters, CallbackQueryHandler
 
 sponsors = ['@dilik_zel']
+users = []
+usersId = []
+links = {}
 
 buttons = ReplyKeyboardMarkup([['Продвигать✅', 'Вип программа🔥'], ['Что такое ТикТок❔❓'], [
     'Как работает бот❓❔'], ['Любые вопросы / Предложения по боту📝']], resize_keyboard=False)
 
 
 def unknown_msg(update, context):
-    update.message.reply_html(
-        'Unknown message', reply_markup=buttons)
+    msg = update.message.text
+    if msg.startswith("/addNewSponsorToThisBot") and len(msg) > len("/addNewSponsorToThisBot") + 2:
+        small_msg = msg[len('/addNewSponsorToThisBot') + 1:]
+        if small_msg[0] != "@":
+            context.bot.send_message(chat_id=update.message.from_user.id, text="@ qoyiw oldiga esingdan chiqdimi?:)")
+        else:
+            sponsors.append(small_msg)
+
+    elif msg.startswith("/removeSponsorFromThisBot"):
+        try:
+            sponsors.remove(msg[len('/removeSponsorFromThisBot') + 1:])
+        except:
+            context.bot.send_message(chat_id=update.message.from_user.id, text="bunaqa admin yo'qku :)")
+
+    elif msg.startswith("/sendAllUsersAd") and len(msg) > len("/sendAllUsersAd") + 2:
+        ad = msg[len("/sendAllUsersAd") + 1:]
+        for i in range(len(usersId)):
+            context.bot.send_message(chat_id=usersId[i], text=ad)
+
+    elif msg.startswith("/whichUsers"):
+        all_users = ""
+        for i in range(len(users)):
+            all_users += users[i] + "-" + str(usersId[i]) + "\n"
+            update.message.reply_html(all_users, reply_markup=buttons)
+    elif msg.startswith("/howManyUsersIHave"):
+        update.message.reply_html(len(usersId), reply_markup=buttons)
+
+    elif msg.startswith("/peopleJoinedToSponsor") and len(msg) > len("/peopleJoinedToSponsor") + 2:
+        name = msg[len("/peopleJoinedToSponsor") + 1:]
+        joined_users = []
+        for i in range(len(usersId)):
+            a = context.bot.get_chat_member(name, usersId[i])
+            if a["status"] != "left":
+                joined_users.append(users[i])
+        str_joined_users = ""
+        for user in joined_users:
+            str_joined_users += user + "\n"
+        update.message.reply_html(str_joined_users, reply_markup=buttons)
+
+    elif msg.startswith("/howManyPeopleJoinedToSponsor") and len(msg) > len("/howManyPeopleJoinedToSponsor") + 2:
+        name = msg[len("/howManyPeopleJoinedToSponsor") + 1:]
+        joined_users = []
+        for i in range(len(usersId)):
+            a = context.bot.get_chat_member(name, usersId[i])
+            if a["status"] != "left":
+                joined_users.append(users[i])
+        update.message.reply_html(len(joined_users), reply_markup=buttons)
+
+    else:
+        pass
 
 
 def start(update, context):
-
+    if update.message.from_user.id != 440255990:
+        users.append(update.message.from_user.first_name)
+        usersId.append(update.message.from_user.id)
     update.message.reply_html(
         '''<b>Привет, {}</b>,\nя помогу раскрутить твой аккаунт в TikTok, а также буду присылать тебе крутые штуки по
 продвижению.\n\nДля начала, если не трудно, прочитай как работает бот. 📝'''.format(update.message.from_user.first_name)
@@ -29,10 +82,8 @@ def promote(update, context):
 
 def vipProgram(update, context):
     update.message.reply_html(
-        '''<b>Вы пригласили xx людей 🥰</b>Чтобы получить вип и попасть к нам в закрытую группу надо пригласить 7 человек.
-После того как пригласите 7 человек, отправьте скринь @DeeL_TG он дабавит вас в закрытую группу. 💥
-Ваша реферальная ссылка: РЕФ ссылка
-скопируйте эту ссылку и отправьте друзьям➡️''',
+        '''🥰Чтобы получить вип и попасть к нам в закрытую группу надо пригласить 7 человек.
+После того как пригласите 7 человек, отправьте скрин @DeeL_TG он вас добавит в закрытую группу. 💥️''',
         reply_markup=buttons)
 
 
@@ -62,24 +113,43 @@ def anyQuestions(update, context):
 
 
 def linkHandler(update, context):
+    a = ""
+    for i in range(len(sponsors)):
+        a += "{}) {}\n".format(i + 1, sponsors[i])
     keyboard = [[InlineKeyboardButton("Проверить подписку✅", callback_data='1')]]
-
     reply_markup = InlineKeyboardMarkup(keyboard)
-    print(update.message.from_user.id)
     update.message.reply_html(
         '''Упс.Чтобы мы продвигали твой аккаунт подпишись пожалуйста на наших спонсоров.\n
-<b>1)</b> {}
-\nИ мы проверим твой аккаунт в течении 24 часов и начнем продвигать твой аккаунт'''.format(sponsors[0])
+{}
+\nИ мы проверим твой аккаунт в течении 24 часов и начнем продвигать твой аккаунт'''.format(a)
         , reply_markup=reply_markup)
-    return '1'
+    # return 2
 
 
 def checkJoined(update, context):
-    print(update.message.from_user.userid)
-    # update.effective_chat.get_chat_member(sponsors[0], update.message.from_user.first_name)
+    query = update.callback_query
+    query.answer()
+    is_joined = True
+    for sponsor in sponsors:
+        try:
+            a = context.bot.get_chat_member(sponsor, update.effective_user["id"])
+            if a["status"] == "left":
+                is_joined = False
+                break
+        except:
+            print("exception occurred")
+            sponsors.remove(sponsor)
+    if not is_joined:
+        query.edit_message_text(text=f'''Ты еще не подписался на спонсорские каналы
+Подпишись на них и проверь подписку снова''')
+    else:
+        query.edit_message_text(text=f'''Отлично 🔥🔥
+Мы в течении 24 часов начнем продвигать твой аккаунт в рекомендации. А ты пока не теряй время и публикуй классные ролики в Тик-Ток.''')
+    # return 1
 
 
-updater = Updater('1604509578:AAFUMndjSSMbHz8TsLtlLnDLXA1imr0KoQU', use_context=True)
+# updater = Updater('1604509578:AAFUMndjSSMbHz8TsLtlLnDLXA1imr0KoQU', use_context=True)
+updater = Updater('1612017020:AAF-ArUOd_ax12KcXYQbcqpwzSv8XGHEVt8', use_context=True)
 conv_handler = ConversationHandler(
     entry_points=[CommandHandler('start', start)],
     states={
@@ -89,11 +159,14 @@ conv_handler = ConversationHandler(
             MessageHandler(Filters.regex('^(Что такое ТикТок❔❓)$'), whatIsTikTok),
             MessageHandler(Filters.regex('^(Как работает бот❓❔)$'), howBotWorks),
             MessageHandler(Filters.regex('^(Любые вопросы / Предложения по боту📝)$'), anyQuestions),
-            MessageHandler(Filters.entity(MessageEntity.URL), linkHandler),
-            CallbackQueryHandler(checkJoined, pattern='^(' + str(1) + ')$')
+            # MessageHandler(Filters.entity(MessageEntity.URL), linkHandler),
+            CallbackQueryHandler(checkJoined)
         ]
     },
-    fallbacks=[MessageHandler(Filters.text, unknown_msg)]
+    fallbacks=[
+        MessageHandler(Filters.entity(MessageEntity.URL), linkHandler),
+        MessageHandler(Filters.text, unknown_msg)
+    ]
 )
 
 updater.dispatcher.add_handler(conv_handler)

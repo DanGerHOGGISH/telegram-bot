@@ -6,8 +6,8 @@ users = []
 usersId = []
 links = {}
 
-buttons = ReplyKeyboardMarkup([['Продвигать✅', 'Вип программа🔥'], ['Что такое ТикТок❔❓'], [
-    'Как работает бот❓❔'], ['Любые вопросы / Предложения по боту📝']], resize_keyboard=False)
+buttons = ReplyKeyboardMarkup([['Rekka Chiqish✅', 'Vip Programma🔥'], ["Tik Tok nima o'zi❔❓"], [
+    'Bot qanday ishlaydi❓❔'], ["Har qanday savol / takliflar bo'yicha📝"]], resize_keyboard=False)
 
 
 def unknown_msg(update, context):
@@ -68,47 +68,47 @@ def start(update, context):
         users.append(update.message.from_user.first_name)
         usersId.append(update.message.from_user.id)
     update.message.reply_html(
-        '''<b>Привет, {}</b>,\nя помогу раскрутить твой аккаунт в TikTok, а также буду присылать тебе крутые штуки по
-продвижению.\n\nДля начала, если не трудно, прочитай как работает бот. 📝'''.format(update.message.from_user.first_name)
-        , reply_markup=buttons)
+        '''<b>Salom, {}</b>,\nMen sizning TikTok hisobingizni targ'ib qilishda yordam beraman va sizga ajoyib narsalarni yuboraman rag'batlantirish.
+Birinchidan, qiyin bo'lmasa, bot qanday ishlashini o'qing. 📝'''.format(update.message.from_user.first_name),
+        reply_markup=buttons)
     return 1
 
 
 def promote(update, context):
     update.message.reply_html(
-        '''Отлично! Пришли мне ссылку на свой аккаунт или ссылку на свое видео в TikTok😉''',
+        '''Yaxshi! Menga Tiktokdagi videoingiz ssilkasini yuboring😉''',
         reply_markup=buttons)
 
 
 def vipProgram(update, context):
     update.message.reply_html(
-        '''🥰Чтобы получить вип и попасть к нам в закрытую группу надо пригласить 7 человек.
-После того как пригласите 7 человек, отправьте скрин @DeeL_TG он вас добавит в закрытую группу. 💥️''',
+        '''🥰VIP olish va yopiq guruhimizga kirish uchun siz 7 kishini taklif qilishingiz kerak.
+7 kishini taklif qilgandan so'ng, @DeeL_TG ga skrin junating, u sizni yopiq guruhga qo'shadi.''',
         reply_markup=buttons)
 
 
 def whatIsTikTok(update, context):
     update.message.reply_html(
-        '<b>TikTok</b> - это площадка, где можно легко стать известным👩🏻‍🦳 и заработать деньги💰. А наша команда '
-        'может помочь в этом деле.📌',
+        '''<b>TikTok</b> - osongina taniqli👩🏻‍🦳‍   bo'lishingiz va pul ishlashingiz mumkin bo'lgan joy💰. Va 
+        bizning jamoamiz bu masalada yordam berishi mumkin.📌''',
         reply_markup=buttons)
 
 
 def howBotWorks(update, context):
     update.message.reply_html(
-        '''Есть много правил в Тиктоке, которые нельзя нарушать❗️, и о которых нигде не пишут🖊. Мы поможем тебе удачно продвинуть твой тикток и даже начать зарабатывать не нем.
-💰Практически каждые 2 дня📌, мы будем присылать тебе крутые идеи/новости/новые правила в тиктоке.➡️\n
-Как мы помогаем попасть в рекомендации❓\n
-Наша команда👥  с блогерами миллионниками будем смотреть твои посты, делиться, комментировать. Это заметит Тикток и будет продвигать твои видео в реки.\n
-Как работает вип программа❓ 🔥\n
-Вы приглашаете 7 людей, а мы делаем анализ вашего аккаунта и даем советы по улучшению. И попадете в нашу закрытую группу. Личная беседа с создателем бота.\n
-Всех в реки ➡️😊''',
+        '''Tiktokda buzilmasligi kerak bo'lgan va hech qayerda yozilmagan ko'plab qoidalar mavjud❗️. Biz sizga tiktok-ni muvaffaqiyatli targ'ib qilishda va hatto undan daromad olishni boshlashda yordam beramiz.
+💰 deyarli har 2 kunda📌, sizga tiktokda ajoyib g'oyalar / yangiliklar / yangi qoidalar yuboramiz .➡️
+
+Sizga taniqli bo'lishingizga qanday yordam beramiz❓
+
+Bizning jamoamiz👥 millionlab odamlar bilan bloggerlar bilan, biz sizning yozuvlaringizni ko'rib chiqamiz, baham ko'ramiz, fikr bildiramiz. Bu Tiktok tomonidan sezilib qoladi va videolaringiz rekda tarqaladi.
+''',
         reply_markup=buttons)
 
 
 def anyQuestions(update, context):
     update.message.reply_html(
-        'По любым вопросам обращайтесь к ➡️ @DeeL_TG',
+        "Har qanday savol / takliflar bo'yicha 📝",
         reply_markup=buttons)
 
 
@@ -116,12 +116,12 @@ def linkHandler(update, context):
     a = ""
     for i in range(len(sponsors)):
         a += "{}) {}\n".format(i + 1, sponsors[i])
-    keyboard = [[InlineKeyboardButton("Проверить подписку✅", callback_data='1')]]
+    keyboard = [[InlineKeyboardButton("Tekshirish✅", callback_data='1')]]
     reply_markup = InlineKeyboardMarkup(keyboard)
     update.message.reply_html(
-        '''Упс.Чтобы мы продвигали твой аккаунт подпишись пожалуйста на наших спонсоров.\n
+        '''Ups. Sizning akkauntingizni rekka chiqarishimiz uchun, sponsorlarga obuna bo'ling.\n
 {}
-\nИ мы проверим твой аккаунт в течении 24 часов и начнем продвигать твой аккаунт'''.format(a)
+\nVa biz sizning akkauntingizni 24 soat ichida tekshirib, rekka olib chiqamiz'''.format(a)
         , reply_markup=reply_markup)
     # return 2
 
@@ -140,25 +140,24 @@ def checkJoined(update, context):
             print("exception occurred")
             sponsors.remove(sponsor)
     if not is_joined:
-        query.edit_message_text(text=f'''Ты еще не подписался на спонсорские каналы
-Подпишись на них и проверь подписку снова''')
+        query.edit_message_text(text=f'''Hali obuna bo'lmagansiz''')
     else:
-        query.edit_message_text(text=f'''Отлично 🔥🔥
-Мы в течении 24 часов начнем продвигать твой аккаунт в рекомендации. А ты пока не теряй время и публикуй классные ролики в Тик-Ток.''')
+        query.edit_message_text(text=f'''Zo'r 🔥🔥
+Tavsiya bo'yicha sizning hisobingizni 24 soat ichida targ'ib qilishni boshlaymiz. Bu orada vaqtni sarflamang va Tik-Tok-da ajoyib videolarni nashr eting''')
     # return 1
 
 
 # updater = Updater('1604509578:AAFUMndjSSMbHz8TsLtlLnDLXA1imr0KoQU', use_context=True)
-updater = Updater('1612017020:AAF-ArUOd_ax12KcXYQbcqpwzSv8XGHEVt8', use_context=True)
+updater = Updater('1655854049:AAGP1v9iwqtCdDoAik6BYHKvbpSrteovQZA', use_context=True)
 conv_handler = ConversationHandler(
     entry_points=[CommandHandler('start', start)],
     states={
         1: [
-            MessageHandler(Filters.regex('^(Продвигать✅)$'), promote),
-            MessageHandler(Filters.regex('^(Вип программа🔥)$'), vipProgram),
-            MessageHandler(Filters.regex('^(Что такое ТикТок❔❓)$'), whatIsTikTok),
-            MessageHandler(Filters.regex('^(Как работает бот❓❔)$'), howBotWorks),
-            MessageHandler(Filters.regex('^(Любые вопросы / Предложения по боту📝)$'), anyQuestions),
+            MessageHandler(Filters.regex('^(Rekka Chiqish✅)$'), promote),
+            MessageHandler(Filters.regex('^(Vip Programma🔥)$'), vipProgram),
+            MessageHandler(Filters.regex("^(Tik Tok nima o'zi❔❓)$"), whatIsTikTok),
+            MessageHandler(Filters.regex('^(Bot qanday ishlaydi❓❔)$'), howBotWorks),
+            MessageHandler(Filters.regex("^(Har qanday savol / takliflar bo'yicha📝)$"), anyQuestions),
             # MessageHandler(Filters.entity(MessageEntity.URL), linkHandler),
             CallbackQueryHandler(checkJoined)
         ]
